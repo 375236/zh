@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.1/handlebars.js"></script>
+</head>
+
+<style>
+	table {width: 100%;border-collapse: collapse;}
+	th {text-align: left;}
+	th, td {border: 1px solid #ccc;padding:5px;}
+</style>
+<body>
+	
+
+
+<input type="text" class="leag" value='109'>
+
+<select name="sele" class="choo" id="">
+	<option value="109">Испания</option>
+	<option value="400">Беларусь</option>
+	<option value="469">Russia</option>
+</select>
+
+<button id="go" class="gogo">Fire</button>
+  
+<div class="updates">
+   <script id="template" type="text/x-handlebars-template">
+      
+      <table class="hideme" style="width:100%">
+      		<tr>
+      			<th>Место</th>
+      			<th>Команда</th>
+      			<th>И</th>
+      			<th>В</th>
+      			<th>Н</th>
+      			<th>П</th>
+      			<th>Мячи</th>
+      			<th>Очки</th>
+      		</tr>
+      	{{#each bb2}}
+			<tr>
+				<td>{{overall_league_position}}</td>
+				<td>{{team_name}}</td>
+				<td>{{overall_league_payed}}</td>
+				<td>{{overall_league_W}}</td>
+				<td>{{overall_league_D}}</td>
+				<td>{{overall_league_L}}</td>
+				<td>{{overall_league_GF}} - {{overall_league_GA}}</td>
+				<td>{{overall_league_PTS}}</td>
+			</tr>
+		{{/each}}	
+      </table>
+     
+   </script>
+</div>
+
+<div class="mypanel"></div>
+
+
+<script type="text/javascript">
+	
+	var bla;
+
+	
+	$('.gogo').on('click', function(){
+		$('.hideme').remove();
+		var bla = $('.choo').val();
+		
+
+
+
+var jsonData = (function() {
+    var result;
+    $.ajax({
+        type:'GET',
+        url:'https://apifootball.com/api/?action=get_standings&league_id='+ bla +'&APIkey=a7cbe0154e37d30baa54667ce63d0330dc83044d05b1237475964daf4e84666e',
+        dataType:'json',
+        async:false,
+        success:function(data){
+            result = data;
+        }
+    });
+    return result;
+	})();
+
+	var data = jsonData;
+
+	
+
+	data.sort(function (a, b) {
+	    /*return a.overall_league_position.localeCompare(b.overall_league_position);*/
+	    return a.overall_league_position - b.overall_league_position;
+	});
+	//document.write('<pre>' + JSON.stringify(data) + '</pre>');
+
+
+
+
+
+
+	var mio = {
+		bb2: data
+	}
+
+
+
+
+
+
+
+
+
+
+
+    var template = Handlebars.compile( $('#template').html() );
+	$('.updates').append( template(mio) );
+
+
+
+
+
+
+
+
+
+	var data2 = $.getJSON('https://apifootball.com/api/?action=get_standings&league_id=400&APIkey=a7cbe0154e37d30baa54667ce63d0330dc83044d05b1237475964daf4e84666e');
+
+	console.log(data2.responseJSON)
+
+
+
+
+
+
+
+	});
+
+
+	
+</script>
+
+
+</body>
+</html>
